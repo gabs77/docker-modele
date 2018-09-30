@@ -2,10 +2,10 @@ version: "2"
 services:
   myproject-app:
     volumes:
-       - myproject-sync:/var/www
+       - myproject-sync:/srv/www
   myproject-phpfpm:
     volumes:
-       - myproject-sync:/var/www
+       - myproject-sync:/srv/www
 
 volumes:
   myproject-sync:
