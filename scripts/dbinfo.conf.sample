@@ -1,0 +1,12 @@
+export db_name=myproject
+export db_username=myproject
+export db_password=myproject1234
+export local_host=myproject-db
+export local_media=~/workspace/myproject/src/pub/media
+export container_name=myproject
+
+export remote_host=
+export remote_db_username=
+export remote_db_password=
+export remote_db_name=
+export remote_media= #/mnt/disk/myproject/pub/media/

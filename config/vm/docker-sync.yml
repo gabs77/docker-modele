@@ -1,0 +1,19 @@
+version: "2"
+syncs:
+  myproject-sync:
+    sync_strategy: 'native_osx'
+    src: './../../src'
+    notify_terminal: true
+    sync_host_ip: '127.0.0.1'
+    sync_userid: '33'
+    sync_args:
+      - "-ignore='Path .idea'"          # no need to send PHPStorm config to container
+      - "-ignore='Path .git'"           # ignore the main .git repo
+      - "-ignore='BelowPath .git'"      # also ignore .git repos in subfolders such as in composer vendor dirs
+      - "-ignore='Path dev'"            # ignore the main .git repo
+      - "-ignore='Path generated'"      # ignore the main .git repo
+      - "-ignore='Path var/*'"          # don't share the cache
+      - "-ignore='Path pub/static/*'"   # don't share the assets
+      - "-ignore='Path pub/media/*'"    # don't share the assets
+options:
+  max_attempt: 30

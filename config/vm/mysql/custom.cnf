@@ -1,0 +1,3 @@
+[mysqld]
+max_allowed_packet=100663296
+local_infile=ON

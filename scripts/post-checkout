@@ -1,0 +1,40 @@
+#/usr/bin/env bash
+if [ "$1" == "$2" ]; then 
+  echo "New branch created. (Probably)."
+  exit 1
+fi
+###
+
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+directory="app/design/frontend/O2web/myproject/web/.gulp"
+current="$(pwd)"
+check_run() {
+  echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
+}
+
+# `npm install` and `npm prune` if the `package.json` file gets changed
+# to update all the nodejs ( grunt ) dependencies deleting the unused packages (not listed into the  `package.json` file)
+if [ -f "$directory/package.json" ]
+then
+	check_run ^package.json "cd $directory && npm install && npm prune"
+fi
+cd $current
+
+# `bower install` and `bower prune` if the `bower.json` file gets changed
+# to install all the frontend dependencies removing the unused packages ( not listed into the  `bower.json` file )
+if [ -f "$directory/bower.json" ]
+then
+	check_run ^bower.json "cd $directory && bower install && bower prune"
+fi
+cd $current
+
+# `composer install` if the `composer.json` file gets changed
+# to update all the php dependencies
+check_run "^composer" "composer install --no-dev -o"
+
+# for the sass files we need a bit more
+# `compass compile` to compile all the scss files when they get changed
+if [ -f "$directory/gulpfile.js" ]
+then
+	check_run ".sass" "cd $directory && gulp sass"
+fi

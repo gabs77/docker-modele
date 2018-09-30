@@ -1,0 +1,82 @@
+version: '2'
+services:
+  myproject-app:
+    build: ./nginx
+    container_name: myproject-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - myproject-phpfpm
+      - myproject-db
+      - myproject-elasticsearch
+    volumes_from:
+      - myproject-appdata
+
+  myproject-appdata:
+    image: tianon/true
+    container_name: myproject-appdata
+    volumes:
+      - ~/.bashrc:/var/www/.bashrc:ro
+      - ~/.composer_cache:/var/www/.composer_cache
+      - ./nginx/conf/:/etc/nginx/conf.d/:delegated
+      - ./nginx/includes/:/etc/nginx/includes/:delegated
+      - ./../../src/pub/media:/srv/www/pub/media:delegated
+
+  myproject-phpfpm:
+    build: ./php-fpm70
+    #    build: ./php-fpm56    <- if you want to use PHP5.6
+    container_name: myproject-phpfpm
+    volumes:
+      - ~/.bashrc:/var/www/.bashrc:ro
+      - ~/.ssh:/var/www/.ssh
+      - ~/.composer_cache:/var/www/.composer_cache
+      - ./../../src/pub/media:/srv/www/pub/media:delegated
+    links:
+      - myproject-db
+      - myproject-elasticsearch
+      - myproject-mail
+
+  myproject-db:
+    image: mysql:5.7
+    container_name: myproject-db
+    environment:
+      - MYSQL_HOST=myproject-db            # DB Host
+      - MYSQL_ROOT_PASSWORD=pm1234  # Password for root user
+      - MYSQL_DATABASE=pm           # Database name
+      - MYSQL_USER=pm               # User name
+      - MYSQL_PASSWORD=pm1234       # User password
+    ports:
+      - "13306:3306"
+    volumes_from:
+      - myproject-dbdata
+    volumes:
+      - ~/.bashrc:/var/www/.bashrc:ro
+      # Mounting custom mysql config (see vm/docker/mysql/custom.cnf to add your custom config)
+      - ./mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf
+
+  myproject-dbdata:
+    image: tianon/true
+    container_name: myproject-dbdata
+    volumes:
+      - ~/.bashrc:/var/www/.bashrc:ro
+      - /var/lib/mysql
+
+  myproject-elasticsearch:
+    build: ./elasticsearch-246
+    container_name: myproject-elasticsearch
+    environment:
+      - bootstrap.memory_lock=true
+      - network.publish_host = 127.0.0.1
+    volumes:
+      - ~/.bashrc:/var/www/.bashrc:ro
+      - /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  myproject-mail:
+    build: ./mailcatcher
+    container_name: myproject-mail
+    ports:
+      - "1080:1080"
+      - "1025:1025"
