@@ -80,6 +80,7 @@ then
     echo 'Insert alias'
     echo "### Alias $code_project ##" >> ~/.bash_aliases
     echo "alias "$code_project"_start=\"cd $path_workspace/$name_project/config/vm && docker-sync start && docker-compose -f docker-compose.yml -f docker-compose-dev.yml up\"" >> ~/.bash_aliases
+    echo "alias "$code_project"_stop=\"cd $path_workspace/$name_project/config/vm && docker-sync stop && docker-compose stop\"" >> ~/.bash_aliases
     echo "alias "$code_project"_phpfpm=\"docker exec -it -u www-data $code_project-phpfpm /bin/bash\"" >> ~/.bash_aliases
     echo "alias "$code_project"_nginx=\"docker exec -it -u root $code_project-nginx /bin/bash\"" >> ~/.bash_aliases
     echo "alias "$code_project"_db=\"docker exec -it -u root $code_project-db /bin/bash\"" >> ~/.bash_aliases
