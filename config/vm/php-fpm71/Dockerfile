@@ -6,7 +6,7 @@ ADD php.ini /usr/local/etc/php/conf.d/php.ini
 RUN apt-get update \
   && apt-get install -y htop vim nano wget  \
     nodejs \
-    ruby ruby-dev rake
+    ruby ruby-dev rake \
     npm
 
 RUN npm install yarn -g
@@ -94,4 +94,5 @@ RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filenam
 
 RUN mkdir /srv/www
 RUN chown -R www-data:www-data /srv/www
-WORKDIR /srv/www
+RUN chown -R www-data:www-data /var/www
+ WORKDIR /srv/www

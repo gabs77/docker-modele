@@ -42,10 +42,10 @@ services:
     container_name: myproject-db
     environment:
       - MYSQL_HOST=myproject-db            # DB Host
-      - MYSQL_ROOT_PASSWORD=pm1234  # Password for root user
-      - MYSQL_DATABASE=pm           # Database name
-      - MYSQL_USER=pm               # User name
-      - MYSQL_PASSWORD=pm1234       # User password
+      - MYSQL_ROOT_PASSWORD=myproject1234  # Password for root user
+      - MYSQL_DATABASE=myproject           # Database name
+      - MYSQL_USER=myproject               # User name
+      - MYSQL_PASSWORD=myproject1234       # User password
     ports:
       - "13306:3306"
     volumes_from:
